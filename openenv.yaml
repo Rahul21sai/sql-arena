@@ -1,0 +1,104 @@
+name: sql_arena
+version: "1.0.0"
+description: >
+  Interactive SQL query challenge environment where AI agents learn to write SQL
+  by iteratively querying databases and receiving execution feedback with partial credit.
+
+author: "Vudumula Naga Sai Rahul"
+license: "MIT"
+
+interface:
+  action:
+    type: object
+    model: sql_arena.models.SQLArenaAction
+    properties:
+      sql_query:
+        type: string
+        description: "SQL query to execute against the database"
+
+  observation:
+    type: object
+    model: sql_arena.models.SQLArenaObservation
+    properties:
+      schema_description:
+        type: string
+      question:
+        type: string
+      query_result:
+        type: string
+        nullable: true
+      error_message:
+        type: string
+        nullable: true
+      feedback:
+        type: string
+        nullable: true
+      expected_columns:
+        type: array
+        nullable: true
+      attempts_remaining:
+        type: integer
+      difficulty:
+        type: string
+      task_id:
+        type: string
+
+  state:
+    type: object
+    model: sql_arena.models.SQLArenaState
+
+tasks:
+  - id: basic_select
+    name: "Basic SELECT Queries"
+    description: "Simple SELECT, WHERE, ORDER BY queries"
+    difficulty: easy
+    max_steps: 5
+    subtasks:
+      - easy_001
+      - easy_002
+      - easy_003
+
+  - id: join_aggregate
+    name: "JOIN and Aggregate Queries"
+    description: "Multi-table JOINs with GROUP BY, HAVING"
+    difficulty: medium
+    max_steps: 7
+    subtasks:
+      - medium_001
+      - medium_002
+      - medium_003
+
+  - id: complex_analysis
+    name: "Complex Analysis Queries"
+    description: "CTEs, window functions, subqueries"
+    difficulty: hard
+    max_steps: 10
+    subtasks:
+      - hard_001
+      - hard_002
+      - hard_003
+
+grading:
+  score_range: [0.0, 1.0]
+  components:
+    - name: execution
+      weight: 0.10
+      description: "Query executes without errors"
+    - name: columns
+      weight: 0.20
+      description: "Correct column names"
+    - name: row_count
+      weight: 0.20
+      description: "Correct number of rows"
+    - name: values
+      weight: 0.50
+      description: "Correct data values"
+
+server:
+  framework: fastapi
+  entrypoint: src.sql_arena.server:app
+  port: 7860
+
+deployment:
+  platform: huggingface-spaces
+  docker: true
