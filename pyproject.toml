@@ -18,7 +18,11 @@ dependencies = [
     "pydantic>=2.5.0",
     "websockets>=12.0",
     "openai>=1.0.0",
+    "openenv-core>=0.2.0",
 ]
+
+[project.scripts]
+server = "src.sql_arena.server:main"
 
 [project.optional-dependencies]
 dev = [
