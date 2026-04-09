@@ -32,7 +32,7 @@ class TestEnvironmentBasics:
         self.env.reset(difficulty="basic_select", task_id="easy_001")
         action = SQLArenaAction(sql_query="INVALID SQL QUERY")
         result = self.env.step(action)
-        assert result.reward == 0.0
+        assert result.reward == 0.01  # Clamped to strictly > 0
         assert result.observation.error_message is not None
 
     def test_state_tracking(self):

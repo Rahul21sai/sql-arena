@@ -194,6 +194,10 @@ def grade_result(
 
     # ---- Final score ----
     score = round(min(max(score, 0.0), 1.0), 4)
+    if score <= 0.0:
+        score = 0.01
+    if score >= 1.0:
+        score = 0.99
     feedback_parts.append(f"\nTotal Score: {score:.2f}/1.00")
 
     return score, "\n".join(feedback_parts)

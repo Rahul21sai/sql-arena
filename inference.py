@@ -182,6 +182,11 @@ def run_task(client: OpenAI, env: SQLArenaEnvironment, task_config: dict) -> flo
                 break
 
         final_score = min(max(best_score, 0.0), 1.0)
+        # Clamp to strictly between 0 and 1
+        if final_score <= 0.0:
+            final_score = 0.01
+        if final_score >= 1.0:
+            final_score = 0.99
         success = final_score >= 0.5
 
     except Exception as e:

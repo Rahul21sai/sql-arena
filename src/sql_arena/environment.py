@@ -136,6 +136,12 @@ class SQLArenaEnvironment:
             reward = score * 0.5 + improvement * 0.5
 
         reward = round(min(max(reward, 0.0), 1.0), 4)
+        # Clamp to strictly between 0 and 1
+        if reward <= 0.0:
+            reward = 0.01
+        if reward >= 1.0:
+            reward = 0.99
+            
         state.rewards_history.append(reward)
         state.total_reward += reward
 
